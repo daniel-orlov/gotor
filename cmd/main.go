@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go.uber.org/zap"
-
 	"gotor/cfg"
 	"gotor/pkg/logging"
+
+	"go.uber.org/zap"
 )
 
 func main() {

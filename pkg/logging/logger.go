@@ -8,8 +8,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var loggerSingleton *zap.Logger
-var once sync.Once
+var (
+	loggerSingleton *zap.Logger
+	once            sync.Once
+)
 
 // Logger returns a concurrence-safe singleton logger.
 func Logger() *zap.Logger {
