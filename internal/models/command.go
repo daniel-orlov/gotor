@@ -17,3 +17,32 @@ const (
 	// CommandMigrateDown is a command to migrate down.
 	CommandMigrateDown
 )
+
+const (
+	// CommandMigrateUpString is the string representation of the migrate up command.
+	CommandMigrateUpString = "up"
+	// CommandMigrateDownString is the string representation of the migrate down command.
+	CommandMigrateDownString = "down"
+)
+
+func (c CommandType) String() string {
+	switch c {
+	case CommandMigrateUp:
+		return CommandMigrateUpString
+	case CommandMigrateDown:
+		return CommandMigrateDownString
+	default:
+		return "unknown"
+	}
+}
+
+func ParseCommandType(s string) CommandType {
+	switch s {
+	case CommandMigrateUpString:
+		return CommandMigrateUp
+	case CommandMigrateDownString:
+		return CommandMigrateDown
+	default:
+		return CommandUnknown
+	}
+}
