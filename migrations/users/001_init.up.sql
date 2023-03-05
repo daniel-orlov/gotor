@@ -1,0 +1,11 @@
+CREATE SCHEMA IF NOT EXISTS gotor;
+
+CREATE TABLE IF NOT EXISTS gotor.users
+(
+    id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name            VARCHAR(255) NOT NULL,
+    email           VARCHAR(255) NOT NULL UNIQUE,
+    organization_id BIGINT       NOT NULL REFERENCES gotor.organizations (id) ON DELETE CASCADE,
+    created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
