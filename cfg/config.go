@@ -10,10 +10,6 @@ import (
 type Config struct {
 	// LogLevel is the log level to use.
 	LogLevel string `envconfig:"LOG_LEVEL" default:"debug"`
-	// Source is the source of the migrations.
-	Source string `envconfig:"SOURCE" default:"./migrations"`
-	// DatabaseURL is the URL of the database to connect to.
-	DatabaseURL string `envconfig:"DATABASE_URL" default:""`
 }
 
 // NewConfig returns a new Config instance, populated with environment variables and defaults.
