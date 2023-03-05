@@ -1,9 +1,9 @@
 .DEFAULT_GOAL := help
 
 .PHONY: run
-run: ## Run the application
+run: ## Run the application passing the arguments
 	@echo "> Running gotor..."
-	go run cmd/main.go
+	go run cmd/main.go $(ARGS)
 
 .PHONY: test
 test: ## Run tests
