@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  # This is not a production-ready setup. It is only for testing purposes.
+  db:
+    image: postgres:15.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres-test
+      - POSTGRES_PASSWORD=postgres-test
+      - POSTGRES_DB=postgres-test
