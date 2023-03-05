@@ -53,7 +53,10 @@ func (c *CLI) Run(ctx context.Context, k *koanf.Koanf) error {
 		return errors.Wrap(err, "parsing command type")
 	}
 
-	migrations, err := models.ParseMigrationList(rawMigrations)
+	migrations, err := models.ParseMigrationList(rawMigrations, commandType.String())
+	if err != nil {
+		return errors.Wrap(err, "parsing migrations")
+	}
 
 	switch commandType {
 	case models.CommandMigrateUp:
