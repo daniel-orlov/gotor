@@ -3,8 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
+	"gotor/cli/flags"
 	"gotor/internal/models"
 )
 
@@ -22,10 +24,19 @@ func New(logger *zap.Logger, migrator Migrator) *CLI {
 	return &CLI{logger: logger, migrator: migrator}
 }
 
-func (c *CLI) Run(ctx context.Context, cmd models.Command, migrations []models.Migration) error {
-	c.logger.Info("running command", zap.String("command", cmd.Type.String()))
+func (c *CLI) Run(ctx context.Context) error {
+	cmd, migrations, err := flags.Parse()
+	if err != nil {
+		return errors.Wrap(err, "parsing flags")
+	}
 
-	switch cmd.Type {
+	c.logger.Info(
+		"running command",
+		zap.String("command", cmd.String()),
+		zap.Int("migrations_count", len(migrations)),
+	)
+
+	switch *cmd {
 	case models.CommandMigrateUp:
 		return c.migrator.MigrateUp(ctx, migrations)
 	case models.CommandMigrateDown:
