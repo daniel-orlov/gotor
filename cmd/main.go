@@ -2,16 +2,15 @@ package main
 
 import (
 	"context"
+	"gotor/cfg"
+	"gotor/cli"
+	"gotor/internal/service/migrator"
+	"gotor/pkg/logging"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/knadh/koanf/v2"
-
-	"gotor/cfg"
-	"gotor/cli"
-	"gotor/internal/service/migrator"
-	"gotor/pkg/logging"
 
 	"go.uber.org/zap"
 )

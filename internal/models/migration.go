@@ -33,7 +33,7 @@ func ParseMigrationList(migrations []string, direction string) ([]Migration, err
 	}
 
 	// Parse each migration.
-	var parsedMigrations []Migration
+	parsedMigrations := make([]Migration, 0, len(migrations))
 	for _, migration := range migrations {
 		parsedMigration, err := ParseMigration(migration, direction)
 		if err != nil {

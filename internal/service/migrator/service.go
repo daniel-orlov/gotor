@@ -2,10 +2,9 @@ package migrator
 
 import (
 	"context"
+	"gotor/internal/models"
 
 	"go.uber.org/zap"
-
-	"gotor/internal/models"
 )
 
 type Service struct {

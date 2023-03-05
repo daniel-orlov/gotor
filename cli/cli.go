@@ -2,13 +2,12 @@ package cli
 
 import (
 	"context"
+	"gotor/cli/flags"
+	"gotor/internal/models"
 
 	"github.com/knadh/koanf/v2"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
-
-	"gotor/cli/flags"
-	"gotor/internal/models"
 )
 
 type Migrator interface {

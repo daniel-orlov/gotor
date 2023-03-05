@@ -2,14 +2,13 @@ package flags
 
 import (
 	"fmt"
+	"gotor/internal/models"
 	"os"
 
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
 	"github.com/pkg/errors"
 	flag "github.com/spf13/pflag"
-
-	"gotor/internal/models"
 )
 
 const (

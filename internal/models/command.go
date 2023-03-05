@@ -30,10 +30,8 @@ const (
 	CommandMigrateDownString = "down"
 )
 
-var (
-	// ErrUnknownCommandType is returned when an unknown command type is parsed.
-	ErrUnknownCommandType = errors.New("unknown command type")
-)
+// ErrUnknownCommandType is returned when an unknown command type is parsed.
+var ErrUnknownCommandType = errors.New("unknown command type")
 
 func (c CommandType) String() string {
 	switch c {
