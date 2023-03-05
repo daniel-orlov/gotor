@@ -10,6 +10,12 @@ import (
 func main() {
 	// init logger
 	logger := logging.Logger()
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			logger.Fatal("syncing logger", zap.Error(err))
+		}
+	}(logger)
 
 	// parse config
 	config, err := cfg.NewConfig()
