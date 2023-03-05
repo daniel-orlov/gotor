@@ -10,6 +10,11 @@ test: ## Run tests
 	@echo "> Testing..."
 	go test -v ./...
 
+.PHONY: test-postgres-up
+test-postgres-up: ## Create a postgres container for testing
+	@echo "> Creating a postgres container for testing..."
+	docker-compose -f deploy/docker-compose.yml up -d
+
 .PHONY: tidy
 tidy: ## Clean and format Go code
 	@echo "> Tidying..."
