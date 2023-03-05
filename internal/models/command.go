@@ -63,3 +63,7 @@ func AllowedCommands() []string {
 		CommandMigrateDownString,
 	}
 }
+
+func AllCommandsString() string {
+	return strings.Join(AllowedCommands(), ", ")
+}
