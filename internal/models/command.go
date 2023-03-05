@@ -1,5 +1,11 @@
 package models
 
+import (
+	"strings"
+
+	"github.com/pkg/errors"
+)
+
 // Command is a command to be executed by the migrator.
 type Command struct {
 	Type CommandType
@@ -24,6 +30,11 @@ const (
 	CommandMigrateDownString = "down"
 )
 
+var (
+	// ErrUnknownCommandType is returned when an unknown command type is parsed.
+	ErrUnknownCommandType = errors.New("unknown command type")
+)
+
 func (c CommandType) String() string {
 	switch c {
 	case CommandMigrateUp:
@@ -35,14 +46,14 @@ func (c CommandType) String() string {
 	}
 }
 
-func ParseCommandType(s string) CommandType {
-	switch s {
+func ParseCommandType(s string) (CommandType, error) {
+	switch strings.ToLower(s) {
 	case CommandMigrateUpString:
-		return CommandMigrateUp
+		return CommandMigrateUp, nil
 	case CommandMigrateDownString:
-		return CommandMigrateDown
+		return CommandMigrateDown, nil
 	default:
-		return CommandUnknown
+		return CommandUnknown, ErrUnknownCommandType
 	}
 }
 

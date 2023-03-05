@@ -38,40 +38,6 @@ func TestCommandType_String(t *testing.T) {
 	}
 }
 
-func TestParseCommandType(t *testing.T) {
-	type args struct {
-		s string
-	}
-	tests := []struct {
-		name string
-		args args
-		want models.CommandType
-	}{
-		{
-			name: "Command unknown",
-			args: args{s: "unknown"},
-			want: models.CommandUnknown,
-		},
-		{
-			name: "Command migrate up",
-			args: args{s: models.CommandMigrateUpString},
-			want: models.CommandMigrateUp,
-		},
-		{
-			name: "Command migrate down",
-			args: args{s: models.CommandMigrateDownString},
-			want: models.CommandMigrateDown,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := models.ParseCommandType(tt.args.s); got != tt.want {
-				t.Errorf("ParseCommandType() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestAllowedCommands(t *testing.T) {
 	tests := []struct {
 		name string
@@ -89,6 +55,71 @@ func TestAllowedCommands(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := models.AllowedCommands(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("AllowedCommands() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestParseCommandType(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    models.CommandType
+		wantErr bool
+	}{
+		{
+			name: "Command unknown",
+			args: args{
+				s: "test",
+			},
+			want:    models.CommandUnknown,
+			wantErr: true,
+		},
+		{
+			name: "Command migrate up",
+			args: args{
+				s: "up",
+			},
+			want:    models.CommandMigrateUp,
+			wantErr: false,
+		},
+		{
+			name: "Command migrate down",
+			args: args{
+				s: "down",
+			},
+			want:    models.CommandMigrateDown,
+			wantErr: false,
+		},
+		{
+			name: "Command migrate up (uppercase)",
+			args: args{
+				s: "UP",
+			},
+			want:    models.CommandMigrateUp,
+			wantErr: false,
+		},
+		{
+			name: "Command migrate down (uppercase)",
+			args: args{
+				s: "DOWN",
+			},
+			want:    models.CommandMigrateDown,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := models.ParseCommandType(tt.args.s)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ParseCommandType() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ParseCommandType() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
