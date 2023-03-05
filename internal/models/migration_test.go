@@ -14,25 +14,25 @@ func TestParseMigration(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    models.Migration
+		want    *models.Migration
 		wantErr bool
 	}{
 		{
 			name:    "invalid migration - no colon",
 			args:    args{migration: "test"},
-			want:    models.Migration{},
+			want:    nil,
 			wantErr: true,
 		},
 		{
 			name:    "invalid migration - too many colons",
 			args:    args{migration: "test:test:test"},
-			want:    models.Migration{},
+			want:    nil,
 			wantErr: true,
 		},
 		{
 			name:    "valid migration",
-			args:    args{migration: "test:test"},
-			want:    models.Migration{TableName: "test", Version: "test"},
+			args:    args{migration: "devices:001_init.up.sql"},
+			want:    &models.Migration{TableName: "devices", Path: "internal/migrations/devices/001_init.up.sql", Version: "001"},
 			wantErr: false,
 		},
 	}

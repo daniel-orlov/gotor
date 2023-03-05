@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -16,13 +18,16 @@ type Migration struct {
 	Version string
 }
 
-const validMigrationPartsCount = 2
+const (
+	validMigrationPartsCount = 2
+	defaultMigrationPath     = "internal/migrations"
+)
 
 // ParseMigrationList parses a [] string into a []Migration.
 // The string should be in the format <table_name>:<migration_version>,<table_name>:<migration_version>,
 // where <table_name> is the name of the table that migration is going to be applied to and
 // <migration_version> is the version of the migration.
-func ParseMigrationList(migrations []string) ([]Migration, error) {
+func ParseMigrationList(migrations []string, direction string) ([]Migration, error) {
 	if len(migrations) == 0 {
 		return nil, errors.New("no migrations provided")
 	}
@@ -30,12 +35,12 @@ func ParseMigrationList(migrations []string) ([]Migration, error) {
 	// Parse each migration.
 	var parsedMigrations []Migration
 	for _, migration := range migrations {
-		parsedMigration, err := ParseMigration(migration)
+		parsedMigration, err := ParseMigration(migration, direction)
 		if err != nil {
 			return nil, errors.Wrap(err, "parsing migrations")
 		}
 
-		parsedMigrations = append(parsedMigrations, parsedMigration)
+		parsedMigrations = append(parsedMigrations, *parsedMigration)
 	}
 
 	return parsedMigrations, nil
@@ -43,15 +48,16 @@ func ParseMigrationList(migrations []string) ([]Migration, error) {
 
 // ParseMigration parses a string into a migration.
 // The string should be in the format <table_name>:<migration_version>.
-func ParseMigration(migration string) (Migration, error) {
+func ParseMigration(migration, direction string) (*Migration, error) {
 	// Split the string into a table name and a version.
 	parts := strings.Split(migration, ":")
 	if len(parts) != validMigrationPartsCount {
-		return Migration{}, errors.New("invalid migration format, should be <table_name>:<migration_version>")
+		return nil, errors.New("invalid migration format, should be <table_name>:<migration_version>")
 	}
 
-	return Migration{
+	return &Migration{
 		TableName: parts[0],
 		Version:   parts[1],
+		Path:      filepath.Join(defaultMigrationPath, parts[0], fmt.Sprintf("%s.%s.sql", parts[1], direction)),
 	}, nil
 }
