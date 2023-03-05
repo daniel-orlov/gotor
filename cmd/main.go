@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// init logger
+	// Init logger.
 	logger := logging.Logger()
 	defer func(logger *zap.Logger) {
 		err := logger.Sync()
@@ -17,15 +17,32 @@ func main() {
 		}
 	}(logger)
 
-	// parse config
+	logger.Info("starting migrator...")
+
+	// Parse config.
 	config, err := cfg.NewConfig()
 	if err != nil {
 		logger.Fatal("parsing config", zap.Error(err))
 	}
-
-	// do something
 	_ = config
 
-	// exit
-	logger.Info("exiting")
+	logger.Info("config parsed successfully")
+
+	// Init services.
+	migratorSvc := migrator.NewService(logger)
+
+	// Init cli.
+	gotorCLI := cli.New(logger, migratorSvc)
+
+	// Init context.
+	ctx, cancel := initContext()
+	defer cancel()
+
+	// Run CLI.
+	err = gotorCLI.Run(ctx)
+	if err != nil {
+		logger.Fatal("running cli", zap.Error(err))
+	}
+
+	logger.Info("exiting migrator...")
 }
