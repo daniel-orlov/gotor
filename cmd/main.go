@@ -1,7 +1,14 @@
 package main
 
 import (
+	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"gotor/cfg"
+	"gotor/cli"
+	"gotor/internal/service/migrator"
 	"gotor/pkg/logging"
 
 	"go.uber.org/zap"
@@ -45,4 +52,17 @@ func main() {
 	}
 
 	logger.Info("exiting migrator...")
+}
+
+func initContext() (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go func() {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+		<-quit
+		cancel()
+	}()
+
+	return ctx, cancel
 }
