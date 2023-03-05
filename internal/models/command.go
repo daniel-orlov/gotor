@@ -46,3 +46,10 @@ func ParseCommandType(s string) CommandType {
 		return CommandUnknown
 	}
 }
+
+func AllowedCommands() []string {
+	return []string{
+		CommandMigrateUpString,
+		CommandMigrateDownString,
+	}
+}

@@ -1,6 +1,7 @@
 package models_test
 
 import (
+	"reflect"
 	"testing"
 
 	"gotor/internal/models"
@@ -66,6 +67,28 @@ func TestParseCommandType(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := models.ParseCommandType(tt.args.s); got != tt.want {
 				t.Errorf("ParseCommandType() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestAllowedCommands(t *testing.T) {
+	tests := []struct {
+		name string
+		want []string
+	}{
+		{
+			name: "Allowed commands list",
+			want: []string{
+				models.CommandMigrateUpString,
+				models.CommandMigrateDownString,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := models.AllowedCommands(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AllowedCommands() = %v, want %v", got, tt.want)
 			}
 		})
 	}
