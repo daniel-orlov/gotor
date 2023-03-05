@@ -6,6 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/knadh/koanf/v2"
+
 	"gotor/cfg"
 	"gotor/cli"
 	"gotor/internal/service/migrator"
@@ -13,6 +15,8 @@ import (
 
 	"go.uber.org/zap"
 )
+
+var k = koanf.New("/") //nolint:gochecknoglobals
 
 func main() {
 	// Init logger.
@@ -46,7 +50,7 @@ func main() {
 	defer cancel()
 
 	// Run CLI.
-	err = gotorCLI.Run(ctx)
+	err = gotorCLI.Run(ctx, k)
 	if err != nil {
 		logger.Fatal("running cli", zap.Error(err))
 	}
