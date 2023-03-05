@@ -2,8 +2,7 @@ package models
 
 // Command is a command to be executed by the migrator.
 type Command struct {
-	Type      CommandType
-	Arguments []string
+	Type CommandType
 }
 
 // CommandType is the type of command.
