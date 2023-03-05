@@ -18,14 +18,11 @@ type Migration struct {
 
 const validMigrationPartsCount = 2
 
-// ParseMigrationList parses a string into a list of migrations.
+// ParseMigrationList parses a [] string into a []Migration.
 // The string should be in the format <table_name>:<migration_version>,<table_name>:<migration_version>,
 // where <table_name> is the name of the table that migration is going to be applied to and
 // <migration_version> is the version of the migration.
-func ParseMigrationList(migrationString string) ([]Migration, error) {
-	// Split the string into a list of migrations.
-	migrations := strings.Split(migrationString, ",")
-
+func ParseMigrationList(migrations []string) ([]Migration, error) {
 	if len(migrations) == 0 {
 		return nil, errors.New("no migrations provided")
 	}

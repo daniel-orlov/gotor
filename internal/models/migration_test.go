@@ -52,7 +52,7 @@ func TestParseMigration(t *testing.T) {
 
 func TestParseMigrationList(t *testing.T) {
 	type args struct {
-		migrationString string
+		migrationString []string
 	}
 	tests := []struct {
 		name    string
@@ -62,25 +62,25 @@ func TestParseMigrationList(t *testing.T) {
 	}{
 		{
 			name:    "invalid migration - no migrations",
-			args:    args{migrationString: ""},
+			args:    args{migrationString: []string{}},
 			want:    nil,
 			wantErr: true,
 		},
 		{
 			name:    "invalid migration - invalid migration",
-			args:    args{migrationString: "test"},
+			args:    args{migrationString: []string{"test"}},
 			want:    nil,
 			wantErr: true,
 		},
 		{
 			name:    "valid migration - one migration",
-			args:    args{migrationString: "test:test"},
+			args:    args{migrationString: []string{"test:test"}},
 			want:    []models.Migration{{TableName: "test", Version: "test"}},
 			wantErr: false,
 		},
 		{
 			name:    "valid migration - multiple migrations",
-			args:    args{migrationString: "test:test,test2:test2,test3:test3"},
+			args:    args{migrationString: []string{"test:test", "test2:test2", "test3:test3"}},
 			want:    []models.Migration{{TableName: "test", Version: "test"}, {TableName: "test2", Version: "test2"}, {TableName: "test3", Version: "test3"}},
 			wantErr: false,
 		},
