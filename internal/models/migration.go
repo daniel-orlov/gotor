@@ -16,12 +16,19 @@ type Migration struct {
 	Path string
 	// Version is the version of the migration.
 	Version string
+	// Steps is the number of steps that the migration is going to take.
+	Steps int
 }
 
 const (
+	VersionLatest            = "latest"
 	validMigrationPartsCount = 2
 	defaultMigrationPath     = "internal/migrations"
 )
+
+func (m Migration) IsLatest() bool {
+	return m.Version == VersionLatest
+}
 
 // ParseMigrationList parses a [] string into a []Migration.
 // The string should be in the format <table_name>:<migration_version>,<table_name>:<migration_version>,
