@@ -4,11 +4,11 @@ import (
 	"context"
 	"strconv"
 
+	"gotor/internal/models"
+
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
-
-	"gotor/internal/models"
 )
 
 type Service struct {

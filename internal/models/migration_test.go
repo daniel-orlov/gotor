@@ -1,10 +1,9 @@
 package models_test
 
 import (
+	"gotor/internal/models"
 	"reflect"
 	"testing"
-
-	"gotor/internal/models"
 )
 
 func TestParseMigration(t *testing.T) {
