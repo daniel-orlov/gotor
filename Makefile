@@ -11,12 +11,12 @@ test: ## Run tests
 	go test -v ./...
 
 .PHONY: postgres-up
-test-postgres-up: ## Create a postgres container for testing
+postgres-up: ## Create a postgres container for testing
 	@echo "> Creating a postgres container for testing..."
 	docker-compose -f deploy/docker-compose.yml up -d
 
 .PHONY: postgres-down
-test-postgres-down: ## Stop the postgres container for testing
+postgres-down: ## Stop the postgres container for testing
 	@echo "> Stopping the postgres container for testing..."
 	docker-compose -f deploy/docker-compose.yml down
 
