@@ -66,7 +66,7 @@ func (s *Service) migrateUp(ctx context.Context, migration *models.Migration) er
 		return errors.Wrap(err, "converting migration version to an int")
 	}
 
-	if err := s.migrator.Steps(steps); err != nil {
+	if err = s.migrator.Steps(steps); err != nil {
 		if errors.Is(err, migrate.ErrNoChange) {
 			s.logger.Info(
 				"no migrations to apply, table is up-to-date",
@@ -115,7 +115,7 @@ func (s *Service) migrateDown(ctx context.Context, migration *models.Migration) 
 		return errors.Wrap(err, "converting migration version to an int")
 	}
 
-	if err := s.migrator.Steps(-steps); err != nil {
+	if err = s.migrator.Steps(-steps); err != nil {
 		if errors.Is(err, migrate.ErrNoChange) {
 			s.logger.Info(
 				"no migrations to apply, table is up-to-date",
