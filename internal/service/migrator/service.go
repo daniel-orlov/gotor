@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"gotor/cfg"
 	"gotor/internal/models"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -13,11 +14,12 @@ import (
 
 type Service struct {
 	logger   *zap.Logger
+	config   *cfg.Config
 	migrator *migrate.Migrate
 }
 
-func NewService(logger *zap.Logger, migrator *migrate.Migrate) *Service {
-	return &Service{logger: logger, migrator: migrator}
+func NewService(logger *zap.Logger, config *cfg.Config, migrator *migrate.Migrate) *Service {
+	return &Service{logger: logger, config: config, migrator: migrator}
 }
 
 func (s *Service) MigrateUp(ctx context.Context, migrations []models.Migration) error {
