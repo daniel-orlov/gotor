@@ -2,13 +2,16 @@ package main
 
 import (
 	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/golang-migrate/migrate/v4"
+
 	"gotor/cfg"
 	"gotor/cli"
 	"gotor/internal/service/migrator"
 	"gotor/pkg/logging"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/knadh/koanf/v2"
 
@@ -34,12 +37,17 @@ func main() {
 	if err != nil {
 		logger.Fatal("parsing config", zap.Error(err))
 	}
-	_ = config
 
 	logger.Info("config parsed successfully")
 
+	// Init Migrator.
+	migrateInstance, err := migrate.New("file://"+config.MigrationsDir, config.Database.DSN)
+	if err != nil {
+		logger.Fatal("initializing migrator", zap.Error(err))
+	}
+
 	// Init services.
-	migratorSvc := migrator.NewService(logger)
+	migratorSvc := migrator.NewService(logger, config, migrateInstance)
 
 	// Init cli.
 	gotorCLI := cli.New(logger, migratorSvc)
