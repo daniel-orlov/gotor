@@ -1,6 +1,7 @@
 package logging
 
 import (
+	"strings"
 	"sync"
 
 	"github.com/pkg/errors"
@@ -14,18 +15,18 @@ var (
 )
 
 // Logger returns a concurrence-safe singleton logger.
-func Logger() *zap.Logger {
+func Logger(format, level string) *zap.Logger {
 	once.Do(func() {
-		loggerSingleton = initLogger()
+		loggerSingleton = initLogger(format, level)
 	})
 
 	return loggerSingleton
 }
 
-func initLogger() *zap.Logger {
+func initLogger(format, level string) *zap.Logger {
 	cfg := zap.Config{
-		Encoding:         "json",
-		Level:            zap.NewAtomicLevelAt(zapcore.InfoLevel),
+		Encoding:         format,
+		Level:            zap.NewAtomicLevelAt(levelFromString(level)),
 		OutputPaths:      []string{"stdout"},
 		ErrorOutputPaths: []string{"stderr"},
 		EncoderConfig: zapcore.EncoderConfig{
@@ -50,4 +51,23 @@ func initLogger() *zap.Logger {
 	}
 
 	return logger
+}
+
+func levelFromString(level string) zapcore.Level {
+	toLower := strings.ToLower(level)
+
+	switch toLower {
+	case "debug":
+		return zapcore.DebugLevel
+	case "info":
+		return zapcore.InfoLevel
+	case "warn":
+		return zapcore.WarnLevel
+	case "error":
+		return zapcore.ErrorLevel
+	case "fatal":
+		return zapcore.FatalLevel
+	default:
+		return zapcore.DebugLevel
+	}
 }

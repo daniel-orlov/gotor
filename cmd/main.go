@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,24 +22,22 @@ import (
 var k = koanf.New("/") //nolint:gochecknoglobals
 
 func main() {
+	// Parse config.
+	config, err := cfg.NewConfig()
+	if err != nil {
+		log.Fatalf("parsing config: %v", err)
+	}
+
 	// Init logger.
-	logger := logging.Logger()
+	logger := logging.Logger(config.Logging.Format, config.Logging.Level)
 	defer func(logger *zap.Logger) {
-		err := logger.Sync()
+		err = logger.Sync()
 		if err != nil {
 			logger.Fatal("syncing logger", zap.Error(err))
 		}
 	}(logger)
 
 	logger.Info("starting migrator...")
-
-	// Parse config.
-	config, err := cfg.NewConfig()
-	if err != nil {
-		logger.Fatal("parsing config", zap.Error(err))
-	}
-
-	logger.Info("config parsed successfully")
 
 	// Init Migrator.
 	migrateInstance, err := migrate.New("file://"+config.MigrationsDir, config.Database.DSN)
