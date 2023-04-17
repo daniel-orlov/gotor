@@ -16,7 +16,10 @@ type Config struct {
 	}
 	Database struct {
 		// DSN is the database connection string.
-		DSN string `envconfig:"DATABASE_DSN" required:"true"`
+		DSN        string `envconfig:"DATABASE_DSN" default:"postgresql://postgres-test:postgres-test@localhost:5432/postgres-test?sslmode=disable"`
+		Name       string `envconfig:"DATABASE_NAME" default:"postgres-test"`
+		SchemaName string `envconfig:"DATABASE_SCHEMA_NAME" default:"public"`
+		Driver     string `envconfig:"DATABASE_DRIVER" default:"postgres"`
 	}
 	// MigrationsDir is the directory where migrations are stored.
 	MigrationsDir string `envconfig:"MIGRATIONS_DIR" default:"migrations"`
