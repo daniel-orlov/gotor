@@ -20,6 +20,12 @@ postgres-down: ## Stop the postgres container for testing
 	@echo "> Stopping the postgres container for testing..."
 	docker-compose -f deploy/docker-compose.yml down
 
+.PHONY: postgres-restart
+postgres-restart: ## Restart the postgres container for testing
+	@echo "> Restarting the postgres container for testing..."
+	make postgres-down
+	make postgres-up
+
 .PHONY: tidy
 tidy: ## Clean and format Go code
 	@echo "> Tidying..."
