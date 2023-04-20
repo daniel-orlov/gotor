@@ -7,7 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file" // for migrate.NewWithDatabaseInstance
+	"github.com/jmoiron/sqlx"
 
 	"gotor/cfg"
 	"gotor/cli"
@@ -37,16 +39,35 @@ func main() {
 		}
 	}(logger)
 
-	logger.Info("starting migrator...")
-
-	// Init Migrator.
-	migrateInstance, err := migrate.New("file://"+config.MigrationsDir, config.Database.DSN)
+	// Connect to database.
+	db, err := sqlx.Connect(config.Database.Driver, config.Database.DSN)
 	if err != nil {
-		logger.Fatal("initializing migrator", zap.Error(err))
+		logger.Fatal("connecting to database", zap.Error(err))
 	}
 
+	defer func(db *sqlx.DB) {
+		err = db.Close()
+		if err != nil {
+			logger.Fatal("closing database connection", zap.Error(err))
+		}
+	}(db)
+
+	logger.Info("connected to database")
+
+	// Init driver.
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{
+		DatabaseName:    config.Database.Name,
+		SchemaName:      config.Database.SchemaName,
+		MigrationsTable: postgres.DefaultMigrationsTable,
+	})
+	if err != nil {
+		logger.Fatal("initializing driver", zap.Error(err))
+	}
+
+	logger.Info("initialized driver")
+
 	// Init services.
-	migratorSvc := migrator.NewService(logger, config, migrateInstance)
+	migratorSvc := migrator.New(logger, config, driver)
 
 	// Init cli.
 	gotorCLI := cli.New(logger, migratorSvc)
