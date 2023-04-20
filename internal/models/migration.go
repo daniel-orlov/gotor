@@ -23,7 +23,7 @@ type Migration struct {
 const (
 	VersionLatest            = "latest"
 	validMigrationPartsCount = 2
-	defaultMigrationPath     = "internal/migrations"
+	defaultMigrationPath     = "migrations"
 )
 
 func (m Migration) IsLatest() bool {
