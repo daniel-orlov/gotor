@@ -3,12 +3,11 @@ package migrator
 import (
 	"context"
 	"fmt"
+	"gotor/cfg"
+	"gotor/internal/models"
 	"strconv"
 
 	"github.com/golang-migrate/migrate/v4/database"
-
-	"gotor/cfg"
-	"gotor/internal/models"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/source/file" // for migrate.NewWithDatabaseInstance
@@ -46,10 +45,11 @@ func (s *Service) MigrateUp(ctx context.Context, migrations []models.Migration) 
 	s.logger.Info("migrating up", zap.Int("migrations_count", len(migrations)))
 
 	for _, migration := range migrations {
-		if err := s.migrateUp(ctx, &migration); err != nil {
+		mInLoop := migration
+
+		if err := s.migrateUp(ctx, &mInLoop); err != nil {
 			return errors.Wrap(err, "migrating up")
 		}
-
 	}
 
 	s.logger.Info("migrations are completed")
@@ -61,7 +61,9 @@ func (s *Service) MigrateDown(ctx context.Context, migrations []models.Migration
 	s.logger.Info("migrating down", zap.Int("migrations_count", len(migrations)))
 
 	for _, migration := range migrations {
-		if err := s.migrateDown(ctx, &migration); err != nil {
+		mInLoop := migration
+
+		if err := s.migrateDown(ctx, &mInLoop); err != nil {
 			return errors.Wrap(err, "migrating down")
 		}
 	}

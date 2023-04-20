@@ -2,9 +2,8 @@ package flags
 
 import (
 	"fmt"
-	"os"
-
 	"gotor/internal/models"
+	"os"
 
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"

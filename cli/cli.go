@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-
 	"gotor/cli/flags"
 	"gotor/internal/models"
 

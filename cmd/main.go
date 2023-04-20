@@ -2,6 +2,10 @@ package main
 
 import (
 	"context"
+	"gotor/cfg"
+	"gotor/cli"
+	"gotor/internal/service/migrator"
+	"gotor/pkg/logging"
 	"log"
 	"os"
 	"os/signal"
@@ -10,11 +14,6 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file" // for migrate.NewWithDatabaseInstance
 	"github.com/jmoiron/sqlx"
-
-	"gotor/cfg"
-	"gotor/cli"
-	"gotor/internal/service/migrator"
-	"gotor/pkg/logging"
 
 	"github.com/knadh/koanf/v2"
 
